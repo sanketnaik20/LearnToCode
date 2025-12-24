@@ -9,6 +9,7 @@ import 'prismjs/themes/prism.css';
 import { Button } from '../../components/ui/Button';
 import { Play, Terminal, Trash2, Copy, Check } from 'lucide-react';
 import axios from 'axios';
+import { SEO } from '../../components/common/SEO';
 
 const DEFAULT_CODE = `#include <iostream>
 
@@ -66,6 +67,31 @@ export const Playground = () => {
         }
     };
 
+    const handleKeyDown = (e) => {
+        const pairs = {
+            '{': '}',
+            '(': ')',
+            '[': ']',
+            '"': '"',
+            "'": "'"
+        };
+
+        if (pairs[e.key]) {
+            e.preventDefault();
+            const { selectionStart, selectionEnd } = e.target;
+            const open = e.key;
+            const close = pairs[e.key];
+            
+            const newCode = code.substring(0, selectionStart) + open + close + code.substring(selectionEnd);
+            setCode(newCode);
+
+            // Set cursor position after re-render
+            setTimeout(() => {
+                e.target.selectionStart = e.target.selectionEnd = selectionStart + 1;
+            }, 0);
+        }
+    };
+
     const handleCopy = () => {
         navigator.clipboard.writeText(code);
         setIsCopied(true);
@@ -74,6 +100,11 @@ export const Playground = () => {
 
     return (
         <div className="flex flex-col gap-8 h-[calc(100vh-250px)]">
+            <SEO 
+                title="Simulator" 
+                description="Interactive C++ playground. Test your logic, debug code templates, and experiment with hardware-level concepts directly in your browser."
+                path="/playground"
+            />
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-4">
                 <div className="space-y-1">
                     <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-brand-grey-400">Environment: v1.0.cpp_reactor</p>
@@ -116,6 +147,7 @@ export const Playground = () => {
                         <Editor
                             value={code}
                             onValueChange={setCode}
+                            onKeyDown={handleKeyDown}
                             highlight={code => Prism.highlight(code, Prism.languages.cpp, 'cpp')}
                             padding={20}
                             style={{

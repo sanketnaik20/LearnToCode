@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Lock, ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../../utils/cn';
+import { SEO } from '../../components/common/SEO';
 
 export const LessonNode = ({ lesson, index }) => {
     const navigate = useNavigate();
@@ -83,6 +84,11 @@ export const CurriculumTree = () => {
 
     return (
         <div className="space-y-4 pb-20">
+            <SEO 
+                title="Curriculum" 
+                description="Explore our comprehensive C++ curriculum, from basic variables to advanced kernel concepts."
+                path="/"
+            />
             <div className="mb-12">
                 <p className="text-brand-grey-500 text-sm max-w-lg leading-relaxed">
                     Build your technical foundation through a curated sequence of logical challenges. Each module is designed to challenge your existing mental models.

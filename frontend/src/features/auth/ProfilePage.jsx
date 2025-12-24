@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
 import { User, School, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SEO } from '../../components/common/SEO';
 
 export const ProfilePage = () => {
     const { user, updateProfile } = useAuth();
@@ -31,6 +32,11 @@ export const ProfilePage = () => {
 
     return (
         <div className="max-w-2xl space-y-16 py-10">
+            <SEO 
+                title={`${user?.username || 'User'} Profile`}
+                description="Manage your learning identity and visualize your progress through the C++ curriculum."
+                path="/profile"
+            />
             <div className="space-y-4">
                 <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-brand-grey-400">User Identity Profile</span>
                 <h1 className="text-5xl font-display font-bold text-foreground tracking-tight">Identity Settings</h1>

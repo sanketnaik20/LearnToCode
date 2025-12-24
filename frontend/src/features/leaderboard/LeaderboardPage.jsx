@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Trophy, Medal, Zap, Target, TrendingUp, Search } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import api from '../../services/api';
+import { SEO } from '../../components/common/SEO';
 
 export const LeaderboardPage = () => {
     const [users, setUsers] = useState([]);
@@ -38,6 +39,11 @@ export const LeaderboardPage = () => {
 
     return (
         <div className="space-y-12 pb-20 max-w-5xl mx-auto">
+            <SEO 
+                title="Global Leaderboard" 
+                description="Check your ranking among top C++ architects. See where you stand in the global hierarchy of logic mastered."
+                path="/leaderboard"
+            />
             {/* Header Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {[

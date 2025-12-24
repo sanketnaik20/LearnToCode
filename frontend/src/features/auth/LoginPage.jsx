@@ -4,6 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { Button } from '../../components/ui/Button';
 import { ShieldCheck, AlertCircle, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { SEO } from '../../components/common/SEO';
 
 export const LoginPage = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -51,7 +52,13 @@ export const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background text-foreground relative">
+        <>
+            <SEO 
+                title={isLogin ? "Login" : "Register"} 
+                description="Securely access the LearnToCode central terminal to continue your C++ architectural journey."
+                path="/login"
+            />
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background text-foreground relative">
             {/* Theme Toggle Button */}
             <div className="fixed top-8 right-8">
                 <button
@@ -182,6 +189,7 @@ export const LoginPage = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
