@@ -1,7 +1,3 @@
-/**
- * Render Blueprint Specification
- * This file orchestrates the multi-service deployment using the existing Dockerfiles.
- */
 services:
   # --- Backend Service ---
   - type: web
@@ -10,18 +6,18 @@ services:
     dockerContext: ./backend
     dockerFilePath: ./backend/Dockerfile
     plan: free
-    region: singapore # Change to your preferred region
+    region: singapore
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 5001
       - key: MONGO_URI
-        sync: false # Set this in the Render Dashboard
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: SESSION_SECRET
         generateValue: true
-      - key: PORT
-        value: 5001
 
   # --- Frontend Service ---
   - type: web
@@ -37,4 +33,3 @@ services:
           type: web
           name: learntocode-api
           property: host
-    # This automatically passes the Backend URL to the Frontend build
