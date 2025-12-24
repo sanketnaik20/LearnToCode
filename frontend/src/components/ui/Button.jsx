@@ -2,10 +2,10 @@ import { cn } from "../../utils/cn";
 
 export const Button = ({ className, variant = "primary", size = "md", children, ...props }) => {
   const variants = {
-    primary: "bg-brand-black dark:bg-brand-white text-brand-white dark:text-brand-black hover:opacity-90 active:scale-[0.98]",
-    secondary: "bg-brand-grey-100 dark:bg-brand-grey-900 text-brand-black dark:text-brand-white hover:bg-brand-grey-200 dark:hover:bg-brand-grey-800",
-    outline: "border border-brand-black dark:border-brand-white text-brand-black dark:text-brand-white hover:bg-brand-black hover:text-brand-white dark:hover:bg-brand-white dark:hover:text-brand-black",
-    ghost: "bg-transparent text-brand-grey-500 hover:text-brand-black dark:hover:text-brand-white"
+    primary: "bg-foreground text-background hover:opacity-90 active:scale-[0.98]",
+    secondary: "bg-brand-grey-100 dark:bg-brand-grey-900 text-foreground hover:bg-brand-grey-200 dark:hover:bg-brand-grey-800",
+    outline: "border border-foreground text-foreground hover:bg-foreground hover:text-background",
+    ghost: "bg-transparent text-brand-grey-500 hover:text-foreground"
   };
 
   const sizes = {

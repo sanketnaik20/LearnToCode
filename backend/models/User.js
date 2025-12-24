@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     xp: { type: Number, default: 0 },
     streakCount: { type: Number, default: 0 },
+    collegeName: { type: String, default: '' },
     lastActiveAt: { type: Date, default: Date.now },
     // SRS concept tracking
     conceptMastery: [{

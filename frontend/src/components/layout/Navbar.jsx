@@ -1,10 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { LogOut, LayoutDashboard, Terminal, Trophy, User } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
+import { LogOut, LayoutDashboard, Terminal, Trophy, User, Sun, Moon } from "lucide-react";
 import { cn } from "../../utils/cn";
 
 export const Navbar = () => {
   const { logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,12 +18,12 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed left-0 top-0 h-full w-20 flex flex-col items-center py-10 bg-brand-white dark:bg-brand-black border-r border-brand-grey-100 dark:border-brand-grey-900 z-50">
+    <nav className="fixed left-0 top-0 h-full w-20 flex flex-col items-center py-10 bg-background border-r border-brand-grey-100 dark:border-brand-grey-900 z-50">
       <div 
         className="mb-14 cursor-pointer group" 
         onClick={() => navigate("/")}
       >
-        <div className="w-10 h-10 border-2 border-brand-black dark:border-brand-white rounded-sm flex items-center justify-center font-display font-bold text-brand-black dark:text-brand-white text-lg transition-transform hover:scale-110 active:scale-95">
+        <div className="w-10 h-10 border-2 border-foreground rounded-sm flex items-center justify-center font-display font-bold text-foreground text-lg transition-transform hover:scale-110 active:scale-95">
           L2C
         </div>
       </div>
@@ -36,16 +38,16 @@ export const Navbar = () => {
               className={cn(
                 "group relative p-3 transition-all duration-500",
                 isActive 
-                  ? "text-brand-black dark:text-brand-white scale-110" 
-                  : "text-brand-grey-400 hover:text-brand-black dark:hover:text-brand-white"
+                  ? "text-foreground scale-110" 
+                  : "text-brand-grey-400 hover:text-foreground"
               )}
             >
               <item.icon size={22} strokeWidth={isActive ? 2.5 : 1.5} />
               <div className={cn(
-                "absolute -right-2 top-1/2 -translate-y-1/2 w-1 h-1 bg-brand-black dark:bg-brand-white rounded-full transition-all duration-500",
+                "absolute -right-2 top-1/2 -translate-y-1/2 w-1 h-1 bg-foreground rounded-full transition-all duration-500",
                 isActive ? "opacity-100" : "opacity-0 scale-0"
               )} />
-              <span className="absolute left-full ml-6 px-3 py-1.5 bg-brand-black dark:bg-brand-white text-brand-white dark:text-brand-black text-[10px] uppercase tracking-widest font-display font-bold rounded-sm opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 whitespace-nowrap">
+              <span className="absolute left-full ml-6 px-3 py-1.5 bg-foreground text-background text-[10px] uppercase tracking-widest font-display font-bold rounded-sm opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 whitespace-nowrap">
                 {item.label}
               </span>
             </button>
@@ -53,12 +55,27 @@ export const Navbar = () => {
         })}
       </div>
 
-      <button
-        onClick={logout}
-        className="p-3 text-brand-grey-400 hover:text-brand-black dark:hover:text-brand-white transition-colors"
-      >
-        <LogOut size={20} strokeWidth={1.5} />
-      </button>
+      <div className="flex flex-col gap-4 items-center">
+        <button
+          onClick={(e) => toggleTheme(e)}
+          className="p-3 text-brand-grey-400 hover:text-foreground transition-colors relative group"
+        >
+          {theme === 'light' ? <Moon size={20} strokeWidth={1.5} /> : <Sun size={20} strokeWidth={1.5} />}
+          <span className="absolute left-full ml-6 px-3 py-1.5 bg-foreground text-background text-[10px] uppercase tracking-widest font-display font-bold rounded-sm opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 whitespace-nowrap">
+            {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          </span>
+        </button>
+
+        <button
+          onClick={logout}
+          className="p-3 text-brand-grey-400 hover:text-foreground transition-colors group relative"
+        >
+          <LogOut size={20} strokeWidth={1.5} />
+          <span className="absolute left-full ml-6 px-3 py-1.5 bg-foreground text-background text-[10px] uppercase tracking-widest font-display font-bold rounded-sm opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 whitespace-nowrap">
+            Logout
+          </span>
+        </button>
+      </div>
     </nav>
   );
 };

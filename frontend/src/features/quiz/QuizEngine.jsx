@@ -67,7 +67,7 @@ export const QuizEngine = () => {
                 <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${((currentIdx + 2) / (questions.length + 1)) * 100}%` }}
-                    className="bg-brand-black dark:bg-brand-white h-full transition-all duration-1000"
+                    className="bg-foreground h-full transition-all duration-1000"
                 />
             </div>
 
@@ -92,7 +92,7 @@ export const QuizEngine = () => {
                     >
                         <div className="space-y-6">
                             <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-brand-grey-400">Conceptual Foundation</span>
-                            <h1 className="text-6xl font-display font-bold text-brand-black dark:text-brand-white tracking-tight">{lesson.title}</h1>
+                            <h1 className="text-6xl font-display font-bold text-foreground tracking-tight">{lesson.title}</h1>
                         </div>
 
                         <div className="space-y-12 max-w-2xl">
@@ -109,7 +109,7 @@ export const QuizEngine = () => {
                                                     </div>
                                                 </div>
                                                 <pre className="p-8 font-mono text-sm leading-relaxed overflow-x-auto bg-brand-grey-50/30 dark:bg-brand-grey-900/10">
-                                                    <code className="text-brand-black dark:text-brand-white">{item.body}</code>
+                                                    <code className="text-foreground">{item.body}</code>
                                                 </pre>
                                             </div>
                                         </div>
@@ -132,7 +132,7 @@ export const QuizEngine = () => {
                     >
                         <div className="space-y-6">
                             <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-brand-grey-400">Module Verification / {currentIdx + 1}</span>
-                            <h2 className="text-4xl font-display font-bold text-brand-black dark:text-brand-white leading-tight max-w-2xl">{currentQuestion.prompt}</h2>
+                            <h2 className="text-4xl font-display font-bold text-foreground leading-tight max-w-2xl">{currentQuestion.prompt}</h2>
                         </div>
 
                         {currentQuestion.type === 'MCQ' && (
@@ -152,14 +152,14 @@ export const QuizEngine = () => {
                                             <div className="flex items-center gap-6">
                                                 <span className={cn(
                                                     "font-mono text-[10px] transition-colors",
-                                                    userAnswer === i ? "text-brand-black dark:text-brand-white" : "text-brand-grey-300"
+                                                    userAnswer === i ? "text-foreground" : "text-brand-grey-300"
                                                 )}>({String.fromCharCode(65 + i)})</span>
                                                 <span className={cn(
                                                     "text-lg font-light transition-colors",
-                                                    userAnswer === i ? "text-brand-black dark:text-brand-white" : "text-brand-grey-600 dark:text-brand-grey-400"
+                                                    userAnswer === i ? "text-foreground" : "text-brand-grey-600 dark:text-brand-grey-400"
                                                 )}>{opt}</span>
                                             </div>
-                                            {userAnswer === i && <div className="w-1.5 h-1.5 bg-brand-black dark:bg-brand-white rounded-full" />}
+                                            {userAnswer === i && <div className="w-1.5 h-1.5 bg-foreground rounded-full" />}
                                         </div>
                                     </button>
                                 ))}

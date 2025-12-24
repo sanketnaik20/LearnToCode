@@ -36,7 +36,7 @@ export const LessonNode = ({ lesson, index }) => {
                     </span>
                     <h3 className={cn(
                         "text-xl font-display font-bold tracking-tight",
-                        isLocked ? "text-brand-grey-400" : "text-brand-black dark:text-brand-white"
+                        isLocked ? "text-brand-grey-400" : "text-foreground"
                     )}>
                         {lesson.title}
                     </h3>
@@ -49,7 +49,7 @@ export const LessonNode = ({ lesson, index }) => {
                     {isLocked ? (
                         <Lock size={18} className="text-brand-grey-300" />
                     ) : isCompleted ? (
-                        <div className="w-8 h-8 rounded-full border border-brand-black dark:border-brand-white flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center">
                             <Check size={16} />
                         </div>
                     ) : (

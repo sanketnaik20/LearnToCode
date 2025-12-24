@@ -49,7 +49,7 @@ export const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-brand-white dark:bg-brand-black text-brand-black dark:text-brand-white">
+        <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background text-foreground">
             <div className="w-full max-w-sm space-y-16 animate-apple-in">
                 <div className="text-center space-y-8">
                     <div className="flex justify-center">

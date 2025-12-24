@@ -20,7 +20,17 @@ router.post('/register', async (req, res) => {
         await user.save();
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '7d' });
-        res.json({ token, user: { id: user._id, username, email } });
+        res.json({ 
+            token, 
+            user: { 
+                id: user._id, 
+                username: user.username, 
+                email: user.email,
+                collegeName: user.collegeName,
+                xp: user.xp,
+                streakCount: user.streakCount
+            } 
+        });
     } catch (err) {
         console.error('Registration Error:', err);
         res.status(500).json({ message: err.message || 'Initialization failed' });
@@ -39,10 +49,65 @@ router.post('/login', async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Security credentials invalid.' });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '7d' });
-        res.json({ token, user: { id: user._id, username: user.username, email: user.email } });
+        res.json({ 
+            token, 
+            user: { 
+                id: user._id, 
+                username: user.username, 
+                email: user.email,
+                collegeName: user.collegeName,
+                xp: user.xp,
+                streakCount: user.streakCount
+            } 
+        });
     } catch (err) {
         console.error('Login Error:', err);
         res.status(500).json({ message: 'Terminal access denied. Server error.' });
+    }
+});
+
+const auth = require('../middleware/auth');
+
+// @route   GET api/auth/profile
+router.get('/profile', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        res.json(user);
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route   PUT api/auth/update-profile
+router.put('/update-profile', auth, async (req, res) => {
+    try {
+        const { username, collegeName } = req.body;
+        const user = await User.findById(req.user.id);
+
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        if (username && username !== user.username) {
+            const existingUser = await User.findOne({ username });
+            if (existingUser) {
+                return res.status(400).json({ message: 'Username already taken by another architect.' });
+            }
+            user.username = username;
+        }
+        
+        if (collegeName !== undefined) user.collegeName = collegeName;
+
+        await user.save();
+        res.json({ 
+            id: user._id, 
+            username: user.username, 
+            email: user.email, 
+            collegeName: user.collegeName,
+            xp: user.xp,
+            streakCount: user.streakCount
+        });
+    } catch (err) {
+        console.error('Update Profile Error:', err);
+        res.status(500).json({ message: 'System failure during profile update.' });
     }
 });
 
