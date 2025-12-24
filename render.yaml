@@ -4,7 +4,7 @@ services:
     name: learntocode-api
     env: docker
     dockerContext: ./backend
-    dockerFilePath: ./backend/Dockerfile
+    dockerCommand: "" # Uses CMD from Dockerfile
     plan: free
     region: oregon
     envVars:
@@ -22,7 +22,7 @@ services:
     name: learntocode-app
     env: docker
     dockerContext: ./frontend
-    dockerFilePath: ./frontend/Dockerfile
+    dockerCommand: "" # Uses CMD from Dockerfile
     plan: free
     region: oregon
     envVars:
