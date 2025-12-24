@@ -6,12 +6,10 @@ services:
     dockerContext: ./backend
     dockerFilePath: ./backend/Dockerfile
     plan: free
-    region: singapore
+    region: oregon
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5001
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
@@ -26,7 +24,7 @@ services:
     dockerContext: ./frontend
     dockerFilePath: ./frontend/Dockerfile
     plan: free
-    region: singapore
+    region: oregon
     envVars:
       - key: VITE_API_URL
         fromService:
