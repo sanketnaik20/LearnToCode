@@ -3,7 +3,7 @@ services:
   - type: web
     name: learntocode-api
     env: docker
-    dockerContext: ./backend
+    dockerContext: backend
     dockerFilePath: Dockerfile
     plan: free
     region: oregon
@@ -23,7 +23,7 @@ services:
   - type: web
     name: learntocode-app
     env: docker
-    dockerContext: ./frontend
+    dockerContext: frontend
     dockerFilePath: Dockerfile
     plan: free
     region: oregon
