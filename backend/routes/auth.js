@@ -3,9 +3,30 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { authLimiter } = require('../middleware/rateLimiter');
+const passport = require('passport');
+
+// @route   GET api/auth/google
+// @desc    Authenticate with Google
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// @route   GET api/auth/google/callback
+// @desc    Google auth callback
+router.get(
+    '/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+        // Successful authentication, generate JWT
+        const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '7d' });
+        
+        // Redirect to frontend with token
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        res.redirect(`${frontendUrl}/oauth-success?token=${token}`);
+    }
+);
 
 // @route   POST api/auth/register
-router.post('/register', async (req, res) => {
+router.post('/register', authLimiter, async (req, res) => {
     try {
         const { username, email, password } = req.body;
         
@@ -38,7 +59,7 @@ router.post('/register', async (req, res) => {
 });
 
 // @route   POST api/auth/login
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
     try {
         const { email, password } = req.body;
         

@@ -11,6 +11,7 @@ const Playground = lazy(() => import('./features/playground/Playground').then(mo
 const LeaderboardPage = lazy(() => import('./features/leaderboard/LeaderboardPage').then(module => ({ default: module.LeaderboardPage })));
 const LoginPage = lazy(() => import('./features/auth/LoginPage').then(module => ({ default: module.LoginPage })));
 const ProfilePage = lazy(() => import('./features/auth/ProfilePage').then(module => ({ default: module.ProfilePage })));
+const OAuthSuccess = lazy(() => import('./features/auth/OAuthSuccess').then(module => ({ default: module.OAuthSuccess })));
 
 const ProtectedLayout = ({ children, title = "Console" }) => {
   const { user, loading, refreshUser } = useAuth();
@@ -69,6 +70,7 @@ function App() {
       <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center"><PageLoader /></div>}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/" element={<ProtectedLayout title="Console"><CurriculumTree /></ProtectedLayout>} />
           <Route path="/playground" element={<ProtectedLayout title="Playground"><Playground /></ProtectedLayout>} />
           <Route path="/leaderboard" element={<ProtectedLayout title="Leaderboard"><LeaderboardPage /></ProtectedLayout>} />

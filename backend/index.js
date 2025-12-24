@@ -3,12 +3,38 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const session = require('express-session');
+const passport = require('passport');
 
 const app = express();
+
+// Passport config
+require('./config/passport')(passport);
+
+// Trust proxy for rate limiting if behind Nginx/Heroku etc.
+app.set('trust proxy', 1);
+
+const { apiLimiter } = require('./middleware/rateLimiter');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Sessions
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || 'secret',
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Apply global rate limiter to all API routes
+app.use('/api', apiLimiter);
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

@@ -45,7 +45,7 @@ export const ProfilePage = () => {
                             <User className="absolute left-0 top-1/2 -translate-y-1/2 text-brand-grey-300 pointer-events-none" size={18} strokeWidth={1.5} />
                             <input 
                                 type="text"
-                                className="w-full bg-transparent border-b border-brand-grey-100 dark:border-brand-grey-900 pl-10 py-4 text-xl font-light focus:outline-none focus:border-foreground transition-colors placeholder:text-brand-grey-100"
+                                className="w-full bg-transparent border-b border-brand-grey-100 dark:border-brand-grey-900 pl-10 py-4 text-xl font-light focus:outline-none focus:border-foreground transition-colors placeholder:text-brand-grey-400"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 placeholder="logical_architect_01"
@@ -59,7 +59,7 @@ export const ProfilePage = () => {
                             <School className="absolute left-0 top-1/2 -translate-y-1/2 text-brand-grey-300 pointer-events-none" size={18} strokeWidth={1.5} />
                             <input 
                                 type="text"
-                                className="w-full bg-transparent border-b border-brand-grey-100 dark:border-brand-grey-900 pl-10 py-4 text-xl font-light focus:outline-none focus:border-foreground transition-colors placeholder:text-brand-grey-100"
+                                className="w-full bg-transparent border-b border-brand-grey-100 dark:border-brand-grey-900 pl-10 py-4 text-xl font-light focus:outline-none focus:border-foreground transition-colors placeholder:text-brand-grey-400"
                                 value={collegeName}
                                 onChange={(e) => setCollegeName(e.target.value)}
                                 placeholder="Department of Logical Engineering"

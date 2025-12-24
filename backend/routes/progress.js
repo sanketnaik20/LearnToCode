@@ -9,8 +9,10 @@ const CppValidator = require('../utils/cppValidator');
 const SrsService = require('../services/srsService');
 const ImpactService = require('../services/impactService');
 
+const { submissionLimiter } = require('../middleware/rateLimiter');
+
 // @route   POST api/progress/validate
-router.post('/validate', auth, async (req, res) => {
+router.post('/validate', [auth, submissionLimiter], async (req, res) => {
     try {
         const { questionId, answer } = req.body;
         const question = await Question.findById(questionId).populate('lessonId');
