@@ -3,6 +3,8 @@ import { useAuth } from './context/AuthContext';
 import { Navbar } from './components/layout/Navbar';
 import { CurriculumTree } from './features/curriculum/CurriculumTree';
 import { QuizEngine } from './features/quiz/QuizEngine';
+import { Playground } from './features/playground/Playground';
+import { LeaderboardPage } from './features/leaderboard/LeaderboardPage';
 import { LoginPage } from './features/auth/LoginPage';
 import { ProfilePage } from './features/auth/ProfilePage';
 import { PlaceholderPage } from './components/layout/PlaceholderPage';
@@ -58,8 +60,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<ProtectedLayout title="Console"><CurriculumTree /></ProtectedLayout>} />
-        <Route path="/playground" element={<ProtectedLayout title="Playground"><PlaceholderPage title="Terminal Simulator" /></ProtectedLayout>} />
-        <Route path="/leaderboard" element={<ProtectedLayout title="Leaderboard"><PlaceholderPage title="Global Rankings" /></ProtectedLayout>} />
+        <Route path="/playground" element={<ProtectedLayout title="Playground"><Playground /></ProtectedLayout>} />
+        <Route path="/leaderboard" element={<ProtectedLayout title="Leaderboard"><LeaderboardPage /></ProtectedLayout>} />
         <Route path="/profile" element={<ProtectedLayout title="Profile"><ProfilePage /></ProtectedLayout>} />
         <Route path="/lesson/:slug" element={<ProtectedLayout title="Simulator"><QuizEngine /></ProtectedLayout>} />
         <Route path="*" element={<Navigate to="/" />} />

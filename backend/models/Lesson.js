@@ -4,6 +4,7 @@ const LessonSchema = new mongoose.Schema({
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     type: { type: String, enum: ['unit', 'lesson'], default: 'lesson' },
+    level: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced', 'Master'], default: 'Beginner' },
     description: String,
     content: [mongoose.Schema.Types.Mixed], // Text, code snippets, etc.
     xpReward: { type: Number, default: 50 },

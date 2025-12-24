@@ -21,6 +21,7 @@ async function seed() {
                 const { questions, ...lessonFields } = lessonData;
                 const lesson = new Lesson({
                     ...lessonFields,
+                    level: lessonData.level || unit.level || 'Beginner',
                     order: globalOrder++
                 });
                 await lesson.save();

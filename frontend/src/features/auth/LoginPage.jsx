@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { Button } from '../../components/ui/Button';
-import { ShieldCheck, AlertCircle } from 'lucide-react';
+import { ShieldCheck, AlertCircle, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
@@ -13,6 +14,7 @@ export const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     
     const { login, register, user } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
 
     // Redirect if already logged in
@@ -49,7 +51,20 @@ export const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background text-foreground">
+        <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background text-foreground relative">
+            {/* Theme Toggle Button */}
+            <div className="fixed top-8 right-8">
+                <button
+                    onClick={(e) => toggleTheme(e)}
+                    className="p-3 text-brand-grey-400 hover:text-foreground transition-colors relative group border border-transparent hover:border-brand-grey-100 dark:hover:border-brand-grey-900 rounded-sm"
+                >
+                    {theme === 'light' ? <Moon size={20} strokeWidth={1.5} /> : <Sun size={20} strokeWidth={1.5} />}
+                    <span className="absolute right-full mr-4 px-3 py-1.5 bg-foreground text-background text-[10px] uppercase tracking-widest font-display font-bold rounded-sm opacity-0 pointer-events-none group-hover:opacity-100 transition-all transform translate-x-3 group-hover:translate-x-0 whitespace-nowrap">
+                        {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+                    </span>
+                </button>
+            </div>
+
             <div className="w-full max-w-sm space-y-16 animate-apple-in">
                 <div className="text-center space-y-8">
                     <div className="flex justify-center">

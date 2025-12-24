@@ -7,12 +7,13 @@ const Progress = require('../models/Progress');
 const Lesson = require('../models/Lesson');
 const CppValidator = require('../utils/cppValidator');
 const SrsService = require('../services/srsService');
+const ImpactService = require('../services/impactService');
 
 // @route   POST api/progress/validate
 router.post('/validate', auth, async (req, res) => {
     try {
         const { questionId, answer } = req.body;
-        const question = await Question.findById(questionId);
+        const question = await Question.findById(questionId).populate('lessonId');
         if (!question) return res.status(404).json({ message: 'Question not found' });
 
         let isCorrect = false;
@@ -26,6 +27,10 @@ router.post('/validate', auth, async (req, res) => {
 
         const user = await User.findById(req.user.id);
         
+        // Check if user has answered this question before (for first-time bonus)
+        let questionProgress = user.questionHistory?.find(q => q.questionId.toString() === questionId);
+        const isFirstAttempt = !questionProgress;
+        
         // Update SRS and Concept Mastery
         if (question.concepts && question.concepts.length > 0) {
             question.concepts.forEach(conceptName => {
@@ -35,7 +40,7 @@ router.post('/validate', auth, async (req, res) => {
                     user.conceptMastery.push(concept);
                 }
 
-                const quality = isCorrect ? 5 : 0; // Simple binary for now, can be sophisticated later
+                const quality = isCorrect ? 5 : 0;
                 const updatedStats = SrsService.calculateNextReview({
                     interval: concept.interval,
                     repetition: concept.repetition,
@@ -46,9 +51,24 @@ router.post('/validate', auth, async (req, res) => {
             });
         }
 
+        let xpEarned = 0;
+        let impactBreakdown = null;
+
         // Handle XP and Streak
         if (isCorrect) {
-            user.xp += 10;
+            // Calculate dynamic XP
+            const impactResult = ImpactService.calculate({
+                questionType: question.type,
+                lessonLevel: question.lessonId?.level || 'Beginner',
+                streakCount: user.streakCount,
+                isFirstAttempt
+            });
+            
+            xpEarned = impactResult.totalXP;
+            impactBreakdown = impactResult.multipliers;
+            user.xp += xpEarned;
+
+            // Update streak
             const now = new Date();
             const lastActive = new Date(user.lastActiveAt);
             const diffDays = Math.floor((now - lastActive) / (1000 * 60 * 60 * 24));
@@ -59,11 +79,23 @@ router.post('/validate', auth, async (req, res) => {
                 user.streakCount = 1;
             }
             user.lastActiveAt = now;
+
+            // Track question history for first-time bonus
+            if (!user.questionHistory) user.questionHistory = [];
+            if (isFirstAttempt) {
+                user.questionHistory.push({ questionId, answeredAt: now, correct: true });
+            }
         }
 
         await user.save();
 
-        res.json({ isCorrect, xpEarned: isCorrect ? 10 : 0, streak: user.streakCount });
+        res.json({ 
+            isCorrect, 
+            xpEarned, 
+            streak: user.streakCount,
+            multipliers: impactBreakdown,
+            isFirstAttempt
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
