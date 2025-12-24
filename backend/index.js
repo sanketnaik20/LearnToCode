@@ -1,20 +1,23 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
+const connectDB = require('./config/db');
+const errorHandler = require('./middleware/error');
+const { apiLimiter } = require('./middleware/rateLimiter');
+
+// Connect to database
+connectDB();
 
 const app = express();
 
 // Passport config
 require('./config/passport')(passport);
 
-// Trust proxy for rate limiting if behind Nginx/Heroku etc.
+// Trust proxy for rate limiting (if behind Nginx, Heroku, etc)
 app.set('trust proxy', 1);
-
-const { apiLimiter } = require('./middleware/rateLimiter');
 
 // Middleware
 app.use(cors());
@@ -42,19 +45,10 @@ app.use('/api/curriculum', require('./routes/curriculum'));
 app.use('/api/progress', require('./routes/progress'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
 
-// Database Connection
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/learntocode';
-mongoose.connect(MONGO_URI)
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.error('MongoDB Connection Error:', err));
-
-// Basic Error Handling
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+// Global Error Handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });

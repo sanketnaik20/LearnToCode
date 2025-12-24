@@ -1,10 +1,14 @@
 const jwt = require('jsonwebtoken');
+const ErrorResponse = require('../utils/errorResponse');
 
+/**
+ * @desc    Standardized Auth Middleware
+ */
 module.exports = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
     if (!token) {
-        return res.status(401).json({ message: 'No token, authorization denied' });
+        return next(new ErrorResponse('No authentication token, authorization denied', 401));
     }
 
     try {
@@ -12,6 +16,6 @@ module.exports = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (err) {
-        res.status(401).json({ message: 'Token is not valid' });
+        return next(new ErrorResponse('Access denied. Authentication sequence invalid.', 401));
     }
 };

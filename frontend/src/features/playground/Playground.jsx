@@ -20,6 +20,7 @@ int main() {
 export const Playground = () => {
     const [searchParams] = useSearchParams();
     const [code, setCode] = useState(DEFAULT_CODE);
+    const [stdin, setStdin] = useState('');
     const [output, setOutput] = useState('');
     const [isRunning, setIsRunning] = useState(false);
     const [isCopied, setIsCopied] = useState(false);
@@ -47,7 +48,8 @@ export const Playground = () => {
                     {
                         content: code
                     }
-                ]
+                ],
+                stdin: stdin
             });
 
             const { run } = response.data;
@@ -127,16 +129,35 @@ export const Playground = () => {
                     </div>
                 </div>
 
-                {/* Output Section */}
-                <div className="lg:col-span-2 flex flex-col bg-brand-grey-50/30 dark:bg-brand-grey-900/40">
-                    <div className="sticky top-0 z-10 flex border-b border-brand-grey-100 dark:border-brand-grey-900 p-3 bg-brand-grey-50 dark:bg-brand-grey-900">
-                        <div className="flex gap-1.5 font-mono text-[8px] uppercase tracking-widest text-brand-grey-400 items-center">
-                            <Terminal size={10} /> 
-                            Output_Stream
+                {/* Sidebar Section: Input & Output */}
+                <div className="lg:col-span-2 flex flex-col divide-y divide-brand-grey-100 dark:divide-brand-grey-900 bg-brand-grey-50/30 dark:bg-brand-grey-900/40">
+                    {/* Input Section */}
+                    <div className="flex flex-col h-1/3">
+                        <div className="sticky top-0 z-10 flex border-b border-brand-grey-100 dark:border-brand-grey-900 p-3 bg-brand-grey-50 dark:bg-brand-grey-900">
+                            <div className="flex gap-1.5 font-mono text-[8px] uppercase tracking-widest text-brand-grey-400 items-center">
+                                <span className="w-1.5 h-1.5 rounded-full bg-brand-grey-200 dark:bg-brand-grey-800" /> 
+                                Input_Buffer (stdin)
+                            </div>
                         </div>
+                        <textarea
+                            value={stdin}
+                            onChange={(e) => setStdin(e.target.value)}
+                            placeholder="// Provide program input here..."
+                            className="flex-1 p-6 font-mono text-xs bg-transparent outline-none resize-none text-brand-black dark:text-brand-white placeholder:text-brand-grey-300 dark:placeholder:text-brand-grey-700"
+                        />
                     </div>
-                    <div className="p-8 font-mono text-xs flex-1 overflow-auto whitespace-pre-wrap leading-relaxed text-brand-grey-600 dark:text-brand-grey-400">
-                        {output || "// Awaiting execution..."}
+
+                    {/* Output Section */}
+                    <div className="flex flex-col flex-1">
+                        <div className="sticky top-0 z-10 flex border-b border-brand-grey-100 dark:border-brand-grey-900 p-3 bg-brand-grey-50 dark:bg-brand-grey-900">
+                            <div className="flex gap-1.5 font-mono text-[8px] uppercase tracking-widest text-brand-grey-400 items-center">
+                                <Terminal size={10} /> 
+                                Output_Stream
+                            </div>
+                        </div>
+                        <div className="p-8 font-mono text-xs flex-1 overflow-auto whitespace-pre-wrap leading-relaxed text-brand-grey-600 dark:text-brand-grey-400">
+                            {output || "// Awaiting execution..."}
+                        </div>
                     </div>
                 </div>
             </div>

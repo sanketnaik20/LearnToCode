@@ -13,4 +13,19 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Add a response interceptor to unwrap standardized responses
+api.interceptors.response.use(
+    (response) => {
+        // If the backend returns our standardized format { success: true, data: ... }
+        // We unpack 'data' so the frontend components get the actual resource
+        if (response.data && response.data.success === true && response.data.data !== undefined) {
+            return { ...response, data: response.data.data };
+        }
+        return response;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 export default api;
