@@ -3,8 +3,8 @@ services:
   - type: web
     name: learntocode-api
     env: docker
-    dockerContext: backend
-    dockerFilePath: Dockerfile
+    dockerContext: .
+    dockerFilePath: backend/Dockerfile
     plan: free
     region: oregon
     envVars:
@@ -23,8 +23,8 @@ services:
   - type: web
     name: learntocode-app
     env: docker
-    dockerContext: frontend
-    dockerFilePath: Dockerfile
+    dockerContext: .
+    dockerFilePath: frontend/Dockerfile
     plan: free
     region: oregon
     envVars:
