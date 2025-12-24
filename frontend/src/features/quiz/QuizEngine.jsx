@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { Button } from '../../components/ui/Button';
-import { ArrowRight, Terminal, Check, X, ShieldAlert, ChevronLeft } from 'lucide-react';
+import { ArrowRight, Terminal, Check, X, ShieldAlert, ChevronLeft, GripVertical, PlayCircle } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 export const QuizEngine = () => {
@@ -25,6 +25,18 @@ export const QuizEngine = () => {
             .catch(err => console.error(err))
             .finally(() => setLoading(false));
     }, [slug]);
+
+    useEffect(() => {
+        if (currentIdx >= 0 && questions[currentIdx]?.type === 'PARSONS') {
+            const initialOrder = questions[currentIdx].blocks.map((_, i) => i);
+            // Simple Fisher-Yates shuffle
+            for (let i = initialOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [initialOrder[i], initialOrder[j]] = [initialOrder[j], initialOrder[i]];
+            }
+            setUserAnswer(initialOrder);
+        }
+    }, [currentIdx, questions]);
 
     const handleValidate = async () => {
         const q = questions[currentIdx];
@@ -103,10 +115,19 @@ export const QuizEngine = () => {
                                         <div className="relative group">
                                             <div className="absolute inset-0 bg-brand-black/5 dark:bg-brand-white/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                                             <div className="relative border border-brand-grey-100 dark:border-brand-grey-900 overflow-hidden">
-                                                <div className="flex border-b border-brand-grey-100 dark:border-brand-grey-900 p-3">
+                                                <div className="flex justify-between items-center border-b border-brand-grey-100 dark:border-brand-grey-900 p-3">
                                                     <div className="flex gap-1.5 font-mono text-[8px] uppercase tracking-widest text-brand-grey-400">
                                                         <span className="w-2 h-2 rounded-full border border-brand-grey-200  dark:border-brand-grey-800" /> Source_Main.cpp
                                                     </div>
+                                                    <button 
+                                                        onClick={() => {
+                                                            const encoded = btoa(encodeURIComponent(item.body));
+                                                            navigate(`/playground?code=${encoded}`);
+                                                        }}
+                                                        className="flex items-center gap-2 text-[8px] uppercase tracking-widest text-brand-grey-400 hover:text-foreground transition-colors"
+                                                    >
+                                                        <PlayCircle size={10} /> Run in Simulator
+                                                    </button>
                                                 </div>
                                                 <pre className="p-8 font-mono text-sm leading-relaxed overflow-x-auto bg-brand-grey-50/30 dark:bg-brand-grey-900/10">
                                                     <code className="text-foreground">{item.body}</code>
@@ -187,6 +208,32 @@ export const QuizEngine = () => {
                             </div>
                         )}
 
+                        {currentQuestion.type === 'PARSONS' && (
+                            <div className="max-w-2xl">
+                                <p className="text-brand-grey-400 text-xs font-mono uppercase tracking-widest mb-6">Drag components into logical order:</p>
+                                <Reorder.Group 
+                                    values={userAnswer || []} 
+                                    onReorder={setUserAnswer}
+                                    className="space-y-3"
+                                >
+                                    {(userAnswer || []).map((blockIdx) => (
+                                        <Reorder.Item 
+                                            key={blockIdx} 
+                                            value={blockIdx}
+                                            className="cursor-move"
+                                        >
+                                            <div className="p-6 border border-brand-grey-100 dark:border-brand-grey-900 bg-brand-grey-50/30 dark:bg-brand-grey-800/20 font-mono text-sm flex items-center gap-4 group hover:border-brand-grey-400 dark:hover:border-brand-grey-600 transition-colors">
+                                                <div className="opacity-20 group-hover:opacity-100 transition-opacity">
+                                                    <GripVertical size={16} />
+                                                </div>
+                                                <span className="text-foreground whitespace-pre">{currentQuestion.blocks[blockIdx]}</span>
+                                            </div>
+                                        </Reorder.Item>
+                                    ))}
+                                </Reorder.Group>
+                            </div>
+                        )}
+
                         <div className="pt-12">
                             {!feedback ? (
                                 <Button size="lg" disabled={userAnswer === null} onClick={handleValidate}>
@@ -219,8 +266,16 @@ export const QuizEngine = () => {
                                                 {feedback.isCorrect ? "Validated" : "Error Detected"}
                                             </p>
                                             <p className="text-brand-grey-500 text-sm font-light mt-1">
-                                                {feedback.isCorrect ? `+${feedback.xpEarned} impact added to profile.` : "The logical sequence is invalid."}
+                                                {feedback.isCorrect 
+                                                    ? `+${feedback.xpEarned} XP${feedback.isFirstAttempt ? ' (First time bonus!)' : ' (Review mode)'}`
+                                                    : "The logical sequence is invalid."
+                                                }
                                             </p>
+                                            {feedback.isCorrect && feedback.multipliers && (
+                                                <p className="text-brand-grey-400 text-[10px] font-mono uppercase tracking-widest mt-2">
+                                                    Streak: ×{feedback.multipliers.streak} • Difficulty: ×{feedback.multipliers.difficulty} • {feedback.isFirstAttempt ? 'First: ×1.50' : 'Retry: ×0.75'}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                     <Button variant="outline" size="md" onClick={handleNext}>

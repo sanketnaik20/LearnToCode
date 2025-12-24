@@ -8,6 +8,12 @@ const UserSchema = new mongoose.Schema({
     streakCount: { type: Number, default: 0 },
     collegeName: { type: String, default: '' },
     lastActiveAt: { type: Date, default: Date.now },
+    // Question history for first-time bonus tracking
+    questionHistory: [{
+        questionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Question' },
+        answeredAt: { type: Date, default: Date.now },
+        correct: { type: Boolean, default: false }
+    }],
     // SRS concept tracking
     conceptMastery: [{
         concept: String,
