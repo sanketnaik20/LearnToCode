@@ -35,7 +35,9 @@ class ImpactService {
         const baseXP = this.BASE_XP[questionType] || 10;
 
         // 2. Streak Multiplier: 1 + (streak * 0.05), capped at 2.0
-        const streakMultiplier = Math.min(2.0, 1 + (streakCount * 0.05));
+        // Ensure streakCount is a number, default to 0
+        const safelyStreak = Number(streakCount) || 0;
+        const streakMultiplier = Math.min(2.0, 1 + (safelyStreak * 0.05));
 
         // 3. Difficulty Multiplier
         const difficultyMultiplier = this.DIFFICULTY_MULTIPLIER[lessonLevel] || 1.0;
@@ -44,7 +46,12 @@ class ImpactService {
         const firstTimeMultiplier = isFirstAttempt ? 1.5 : 0.75;
 
         // Calculate total
-        const totalXP = Math.round(baseXP * streakMultiplier * difficultyMultiplier * firstTimeMultiplier);
+        let totalXP = baseXP * streakMultiplier * difficultyMultiplier * firstTimeMultiplier;
+        
+        // Safety check against NaN or negative
+        if (isNaN(totalXP) || totalXP < 0) totalXP = 10;
+        
+        totalXP = Math.round(totalXP);
 
         return {
             baseXP,

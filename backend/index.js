@@ -14,6 +14,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/curriculum', require('./routes/curriculum'));
 app.use('/api/progress', require('./routes/progress'));
+app.use('/api/leaderboard', require('./routes/leaderboard'));
 
 // Database Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/learntocode';

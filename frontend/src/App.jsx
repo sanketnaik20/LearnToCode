@@ -1,19 +1,26 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect, Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { Navbar } from './components/layout/Navbar';
-import { CurriculumTree } from './features/curriculum/CurriculumTree';
-import { QuizEngine } from './features/quiz/QuizEngine';
-import { Playground } from './features/playground/Playground';
-import { LeaderboardPage } from './features/leaderboard/LeaderboardPage';
-import { LoginPage } from './features/auth/LoginPage';
-import { ProfilePage } from './features/auth/ProfilePage';
-import { PlaceholderPage } from './components/layout/PlaceholderPage';
-import { Flame, Zap } from 'lucide-react';
+import { PageLoader } from './components/layout/PageLoader';
+
+// Lazy load feature components
+const CurriculumTree = lazy(() => import('./features/curriculum/CurriculumTree').then(module => ({ default: module.CurriculumTree })));
+const QuizEngine = lazy(() => import('./features/quiz/QuizEngine').then(module => ({ default: module.QuizEngine })));
+const Playground = lazy(() => import('./features/playground/Playground').then(module => ({ default: module.Playground })));
+const LeaderboardPage = lazy(() => import('./features/leaderboard/LeaderboardPage').then(module => ({ default: module.LeaderboardPage })));
+const LoginPage = lazy(() => import('./features/auth/LoginPage').then(module => ({ default: module.LoginPage })));
+const ProfilePage = lazy(() => import('./features/auth/ProfilePage').then(module => ({ default: module.ProfilePage })));
 
 const ProtectedLayout = ({ children, title = "Console" }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, refreshUser } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (user) refreshUser();
+  }, [location.pathname]); // Refresh on route change
   
-  if (loading) return null;
+  if (loading) return <div className="h-screen w-screen flex items-center justify-center"><PageLoader /></div>;
   if (!user) return <Navigate to="/login" />;
 
   return (
@@ -45,8 +52,10 @@ const ProtectedLayout = ({ children, title = "Console" }) => {
             </div>
           </div>
         </header>
-        <div className="max-w-6xl mx-auto">
-          {children}
+        <div className="max-w-6xl mx-auto min-h-[50vh]">
+            <Suspense fallback={<PageLoader />}>
+                {children}
+            </Suspense>
         </div>
       </main>
     </div>
@@ -57,15 +66,17 @@ const ProtectedLayout = ({ children, title = "Console" }) => {
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<ProtectedLayout title="Console"><CurriculumTree /></ProtectedLayout>} />
-        <Route path="/playground" element={<ProtectedLayout title="Playground"><Playground /></ProtectedLayout>} />
-        <Route path="/leaderboard" element={<ProtectedLayout title="Leaderboard"><LeaderboardPage /></ProtectedLayout>} />
-        <Route path="/profile" element={<ProtectedLayout title="Profile"><ProfilePage /></ProtectedLayout>} />
-        <Route path="/lesson/:slug" element={<ProtectedLayout title="Simulator"><QuizEngine /></ProtectedLayout>} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+      <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center"><PageLoader /></div>}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<ProtectedLayout title="Console"><CurriculumTree /></ProtectedLayout>} />
+          <Route path="/playground" element={<ProtectedLayout title="Playground"><Playground /></ProtectedLayout>} />
+          <Route path="/leaderboard" element={<ProtectedLayout title="Leaderboard"><LeaderboardPage /></ProtectedLayout>} />
+          <Route path="/profile" element={<ProtectedLayout title="Profile"><ProfilePage /></ProtectedLayout>} />
+          <Route path="/lesson/:slug" element={<ProtectedLayout title="Simulator"><QuizEngine /></ProtectedLayout>} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }
