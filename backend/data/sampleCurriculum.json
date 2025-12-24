@@ -1,0 +1,73 @@
+{
+    "unit": {
+        "id": "cpp-pointers-unit",
+        "title": "C++ Memory Management",
+        "description": "Understand pointers, references, and the heap.",
+        "lessons": [
+            {
+                "id": "intro-pointers",
+                "title": "Welcome to Pointers",
+                "xpReward": 50,
+                "prerequisites": [
+                    "variables-review"
+                ],
+                "content": [
+                    {
+                        "type": "theory",
+                        "title": "What is a Pointer?",
+                        "body": "A pointer is a variable whose value is the address of another variable. Direct address of the memory location.",
+                        "code": "int var = 20;\nint *ip = &var;"
+                    }
+                ],
+                "questions": [
+                    {
+                        "id": "q1",
+                        "type": "MCQ",
+                        "prompt": "Which operator is used to get the address of a variable?",
+                        "options": [
+                            "*",
+                            "&",
+                            "->",
+                            "::"
+                        ],
+                        "solution": 1,
+                        "concepts": [
+                            "pointers",
+                            "operators"
+                        ]
+                    },
+                    {
+                        "id": "q2",
+                        "type": "FILL_IN_BLANK",
+                        "prompt": "Fill in the blank to declare a pointer to a double.",
+                        "codeTemplate": "double ___ ptr;",
+                        "solution": "*",
+                        "concepts": [
+                            "pointers",
+                            "syntax"
+                        ]
+                    },
+                    {
+                        "id": "q3",
+                        "type": "PARSONS",
+                        "prompt": "Arrange the code to declare an int, a pointer, and assign the address.",
+                        "blocks": [
+                            "int x = 5;",
+                            "int* p;",
+                            "p = &x;"
+                        ],
+                        "solution": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "concepts": [
+                            "pointers",
+                            "syntax"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
