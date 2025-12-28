@@ -59,7 +59,7 @@ exports.getProfile = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/auth/update-profile
 // @access  Private
 exports.updateProfile = asyncHandler(async (req, res, next) => {
-    const { username, collegeName } = req.body;
+    const { username, collegeName, leetcodeUsername } = req.body;
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -75,6 +75,7 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
     }
 
     if (collegeName !== undefined) user.collegeName = collegeName;
+    if (leetcodeUsername !== undefined) user.leetcodeUsername = leetcodeUsername;
 
     await user.save();
 
@@ -85,6 +86,7 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
             username: user.username,
             email: user.email,
             collegeName: user.collegeName,
+            leetcodeUsername: user.leetcodeUsername,
             xp: user.xp,
             streakCount: user.streakCount
         }
@@ -110,6 +112,7 @@ const sendTokenResponse = (user, statusCode, res) => {
             username: user.username,
             email: user.email,
             collegeName: user.collegeName,
+            leetcodeUsername: user.leetcodeUsername,
             xp: user.xp,
             streakCount: user.streakCount
         }

@@ -44,6 +44,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/curriculum', require('./routes/curriculum'));
 app.use('/api/progress', require('./routes/progress'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
+app.use('/api/problems', require('./routes/problem'));
 
 // Global Error Handler
 app.use(errorHandler);

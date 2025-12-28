@@ -1,0 +1,22 @@
+spring.application.name=LearnToCode-Migration
+server.port=8080
+
+# Database
+spring.data.mongodb.uri=mongodb://localhost:27017/learntocode
+
+# Security / JWT (PLACEHOLDERS - DO NOT COMMIT SECRETS)
+jwt.secret=${JWT_SECRET:placeholder_secret_key_change_in_production}
+jwt.expiration=604800000
+
+# Session / Other Secrets
+app.session.secret=${SESSION_SECRET:placeholder_session_secret}
+
+# OAuth Configuration
+google.client.id=${GOOGLE_CLIENT_ID:your_client_id}
+google.client.secret=${GOOGLE_CLIENT_SECRET:your_client_secret}
+
+# Frontend Integration
+app.frontend.url=http://localhost:5173
+
+# Logging
+logging.level.com.backend_java.Migration=DEBUG

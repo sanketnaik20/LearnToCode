@@ -2,10 +2,12 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const Lesson = require('./models/Lesson');
 const Question = require('./models/Question');
+const Problem = require('./models/Problem');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/learntocode';
 
 const { cPlusPlusCourse } = require('./data/courseData');
+const { problems } = require('./data/problemData');
 async function seed() {
     try {
         await mongoose.connect(MONGO_URI);
@@ -14,6 +16,7 @@ async function seed() {
         // Clear existing
         await Lesson.deleteMany({});
         await Question.deleteMany({});
+        await Problem.deleteMany({});
 
         let globalOrder = 0;
         for (const unit of cPlusPlusCourse.units) {
@@ -34,6 +37,12 @@ async function seed() {
                     await question.save();
                 }
             }
+        }
+
+        // Seed Problems
+        for (const probData of problems) {
+            const problem = new Problem(probData);
+            await problem.save();
         }
 
         console.log('Database seeded successfully!');

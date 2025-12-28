@@ -10,8 +10,11 @@ export const OAuthSuccess = () => {
     useEffect(() => {
         const token = searchParams.get('token');
         if (token) {
-            loginWithToken(token);
-            navigate('/');
+            const handleLogin = async () => {
+                await loginWithToken(token);
+                navigate('/');
+            };
+            handleLogin();
         } else {
             navigate('/login');
         }

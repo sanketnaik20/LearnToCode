@@ -1,0 +1,65 @@
+[
+  {
+    "title": "Two Sum",
+    "slug": "two-sum",
+    "description": "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.",
+    "difficulty": "Easy",
+    "tags": [
+      "Arrays",
+      "Hash Table"
+    ],
+    "leetcodeUrl": "https://leetcode.com/problems/two-sum/",
+    "order": 1
+  },
+  {
+    "title": "Reverse String",
+    "slug": "reverse-string",
+    "description": "Write a function that reverses a string. The input string is given as an array of characters `s`.",
+    "difficulty": "Easy",
+    "tags": [
+      "Strings",
+      "Two Pointers"
+    ],
+    "leetcodeUrl": "https://leetcode.com/problems/reverse-string/",
+    "order": 2
+  },
+  {
+    "title": "Longest Substring Without Repeating Characters",
+    "slug": "longest-substring-without-repeating-characters",
+    "description": "Given a string `s`, find the length of the longest substring without repeating characters.",
+    "difficulty": "Medium",
+    "tags": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ],
+    "leetcodeUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+    "order": 3
+  },
+  {
+    "title": "Add Two Numbers",
+    "slug": "add-two-numbers",
+    "description": "You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order.",
+    "difficulty": "Medium",
+    "tags": [
+      "Linked List",
+      "Math",
+      "Recursion"
+    ],
+    "leetcodeUrl": "https://leetcode.com/problems/add-two-numbers/",
+    "order": 4
+  },
+  {
+    "title": "Median of Two Sorted Arrays",
+    "slug": "median-of-two-sorted-arrays",
+    "description": "Given two sorted arrays `nums1` and `nums2` of size `m` and `n` respectively, return the median of the two sorted arrays.",
+    "difficulty": "Hard",
+    "tags": [
+      "Array",
+      "Binary Search",
+      "Divide and Conquer"
+    ],
+    "leetcodeUrl": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+    "order": 5
+  }
+]

@@ -9,33 +9,47 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+        if (storedUser && storedUser !== 'undefined') {
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (e) {
+                console.error("Failed to parse stored user", e);
+                localStorage.removeItem('user');
+            }
         }
         setLoading(false);
     }, []);
 
     const login = async (email, password) => {
         const res = await api.post('/auth/login', { email, password });
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-        setUser(res.data.user);
+        const userData = res.data.user;
+        if (userData) {
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+        }
         return res.data;
     };
 
     const register = async (username, email, password) => {
         const res = await api.post('/auth/register', { username, email, password });
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-        setUser(res.data.user);
+        const userData = res.data.user;
+        if (userData) {
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+        }
         return res.data;
     };
 
     const loginWithToken = async (token) => {
         localStorage.setItem('token', token);
         const res = await api.get('/auth/profile');
-        localStorage.setItem('user', JSON.stringify(res.data));
-        setUser(res.data);
+        const userData = res.data.data;
+        if (userData) {
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+        }
     };
 
     const logout = () => {
@@ -46,16 +60,22 @@ export const AuthProvider = ({ children }) => {
 
     const updateProfile = async (data) => {
         const res = await api.put('/auth/update-profile', data);
-        localStorage.setItem('user', JSON.stringify(res.data));
-        setUser(res.data);
-        return res.data;
+        const userData = res.data.data;
+        if (userData) {
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+        }
+        return userData;
     };
 
     const refreshUser = async () => {
         try {
             const res = await api.get('/auth/profile');
-            localStorage.setItem('user', JSON.stringify(res.data));
-            setUser(res.data);
+            const userData = res.data.data;
+            if (userData) {
+                localStorage.setItem('user', JSON.stringify(userData));
+                setUser(userData);
+            }
         } catch (err) {
             console.error("Failed to refresh user stats", err);
         }
