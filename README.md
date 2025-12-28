@@ -5,12 +5,13 @@ LearnToCode is a premium, monochrome educational platform designed to master C++
 ![License](https://img.shields.io/badge/license-MIT-black)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=springboot&logoColor=white)
 
 ## ✨ Features
 
 - **Architectural Roadmap**: 6 comprehensive units covering everything from Foundations to Template Metaprogramming.
 - **Monochrome Design**: High-end minimalist UI built with Tailwind v4 and Josefin Sans.
+- **LeetCode Integration**: Real-time synchronization of LeetCode statistics and global ranking.
 - **Logical Simulator**: Interactive quiz engine with real-time logical validation.
 - **Progress Tracking**: XP and Streak systems to maintain learning momentum.
 - **SRS Foundation**: Spaced Repetition System logic integrated for mastery tracking.
@@ -18,13 +19,15 @@ LearnToCode is a premium, monochrome educational platform designed to master C++
 ## 🛠️ Tech Stack
 
 - **Frontend**: React, Vite, Framer Motion, Lucide React, Tailwind CSS v4.
-- **Backend**: Node.js, Express, MongoDB, Mongoose, JWT Authentication.
+- **Backend (Active)**: Node.js, Express, MongoDB, Mongoose, JWT Authentication.
+- **Backend (Migration In-Progress)**: Java Spring Boot, Spring Security, MongoDB.
 - **Design**: Monochrome aesthetic, Apple-inspired transitions.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
+- Java 17+ (For Migration testing)
 - MongoDB (Running locally or on Atlas)
 
 ### Installation
@@ -35,7 +38,7 @@ LearnToCode is a premium, monochrome educational platform designed to master C++
    cd LearnToCode
    ```
 
-2. **Setup Backend**
+2. **Setup Primary Backend (Node.js)**
    ```bash
    cd backend
    npm install
@@ -55,9 +58,18 @@ LearnToCode is a premium, monochrome educational platform designed to master C++
    npm run start
    ```
 
-3. **Setup Frontend**
+3. **Setup Java Backend (Experimental Migration)**
    ```bash
-   cd ../frontend
+   cd Migration
+   # Copy properties template
+   cp src/main/resources/application.properties.example src/main/resources/application.properties
+   # Update application.properties with your secrets
+   ./mvnw spring-boot:run
+   ```
+
+4. **Setup Frontend**
+   ```bash
+   cd frontend
    npm install
    npm run dev
    ```
@@ -65,7 +77,8 @@ LearnToCode is a premium, monochrome educational platform designed to master C++
 ## 📂 Project Structure
 
 - `/frontend`: React application with the minimalist design system.
-- `/backend`: Express API and database models.
+- `/backend`: Current production Node.js API and database models.
+- `/Migration`: In-progress Java Spring Boot backend migration.
 - `/backend/data/courseData.js`: Central source of truth for the curriculum.
 
 ## ⚖️ License
