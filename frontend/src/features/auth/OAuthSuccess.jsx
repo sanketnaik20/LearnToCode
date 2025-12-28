@@ -11,8 +11,13 @@ export const OAuthSuccess = () => {
         const token = searchParams.get('token');
         if (token) {
             const handleLogin = async () => {
-                await loginWithToken(token);
-                navigate('/');
+                try {
+                    await loginWithToken(token);
+                    navigate('/');
+                } catch (err) {
+                    console.error('OAuth sync failed:', err);
+                    navigate('/login?error=sync_failed');
+                }
             };
             handleLogin();
         } else {

@@ -8,38 +8,45 @@ module.exports = function(passport) {
             {
                 clientID: process.env.GOOGLE_CLIENT_ID || 'placeholder_id',
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'placeholder_secret',
-                callbackURL: '/api/auth/google/callback',
+                callbackURL: process.env.GOOGLE_CALLBACK_URL || '/api/auth/google/callback',
                 proxy: true,
             },
             async (accessToken, refreshToken, profile, done) => {
-                const newUser = {
-                    googleId: profile.id,
-                    username: profile.displayName.replace(/\s+/g, '').toLowerCase() + Math.floor(Math.random() * 1000),
-                    email: profile.emails[0].value,
-                    avatar: profile.photos[0].value,
-                };
-
                 try {
+                    const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+                    const avatar = profile.photos && profile.photos[0] ? profile.photos[0].value : null;
+
+                    if (!email) {
+                        return done(new Error('No email found in Google profile'), null);
+                    }
+
+                    const newUser = {
+                        googleId: profile.id,
+                        username: (profile.displayName || 'user').replace(/\s+/g, '').toLowerCase() + Math.floor(Math.random() * 1000),
+                        email: email,
+                        avatar: avatar,
+                    };
+
                     let user = await User.findOne({ googleId: profile.id });
 
                     if (user) {
-                        done(null, user);
+                        return done(null, user);
                     } else {
                         // Check if user with same email exists
-                        user = await User.findOne({ email: profile.emails[0].value });
+                        user = await User.findOne({ email: email });
                         if (user) {
                             user.googleId = profile.id;
-                            user.avatar = profile.photos[0].value;
+                            if (avatar) user.avatar = avatar;
                             await user.save();
-                            done(null, user);
+                            return done(null, user);
                         } else {
                             user = await User.create(newUser);
-                            done(null, user);
+                            return done(null, user);
                         }
                     }
                 } catch (err) {
-                    console.error(err);
-                    done(err, null);
+                    console.error('Google Auth Strategy Error:', err);
+                    return done(err, null);
                 }
             }
         )

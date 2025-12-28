@@ -17,7 +17,9 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 // @route   GET api/auth/google/callback
 router.get(
     '/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
+    passport.authenticate('google', { 
+        failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login` 
+    }),
     googleCallback
 );
 
