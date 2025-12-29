@@ -88,7 +88,8 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
             collegeName: user.collegeName,
             leetcodeUsername: user.leetcodeUsername,
             xp: user.xp,
-            streakCount: user.streakCount
+            streakCount: user.streakCount,
+            karma: user.karma
         }
     });
 });
@@ -114,7 +115,8 @@ const sendTokenResponse = (user, statusCode, res) => {
             collegeName: user.collegeName,
             leetcodeUsername: user.leetcodeUsername,
             xp: user.xp,
-            streakCount: user.streakCount
+            streakCount: user.streakCount,
+            karma: user.karma
         }
     });
 };

@@ -36,8 +36,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Apply global rate limiter to all API routes
-app.use('/api', apiLimiter);
+// Apply global rate limiter to all API routes (Disabled in development)
+if (process.env.NODE_ENV !== 'development') {
+    app.use('/api', apiLimiter);
+}
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -45,6 +47,7 @@ app.use('/api/curriculum', require('./routes/curriculum'));
 app.use('/api/progress', require('./routes/progress'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
 app.use('/api/problems', require('./routes/problem'));
+app.use('/api/community', require('./routes/communityRoutes'));
 
 // Global Error Handler
 app.use(errorHandler);

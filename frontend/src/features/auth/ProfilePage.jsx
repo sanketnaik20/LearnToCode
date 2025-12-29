@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
-import { User, School, CheckCircle2, AlertCircle, TrendingUp, Award, Zap, LayoutGrid } from 'lucide-react';
+import { User, School, CheckCircle2, AlertCircle, TrendingUp, Award, Zap, LayoutGrid, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SEO } from '../../components/common/SEO';
 import api from '../../services/api';
@@ -107,6 +107,13 @@ export const ProfilePage = () => {
                         <div>
                             <p className="text-[9px] uppercase tracking-widest text-brand-grey-400 font-bold">Streak</p>
                             <p className="text-lg font-display font-bold leading-none">{user?.streakCount}d</p>
+                        </div>
+                    </div>
+                    <div className="px-6 py-3 rounded-2xl bg-brand-grey-50/50 dark:bg-brand-grey-900/40 border border-brand-grey-100 dark:border-brand-grey-800 flex items-center gap-3">
+                        <Users size={14} className="text-cyan-500" />
+                        <div>
+                            <p className="text-[9px] uppercase tracking-widest text-brand-grey-400 font-bold">Karma</p>
+                            <p className="text-lg font-display font-bold leading-none">{user?.karma || 0}</p>
                         </div>
                     </div>
                 </div>

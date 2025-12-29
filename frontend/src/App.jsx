@@ -13,6 +13,9 @@ const LoginPage = lazy(() => import('./features/auth/LoginPage').then(module => 
 const ProfilePage = lazy(() => import('./features/auth/ProfilePage').then(module => ({ default: module.ProfilePage })));
 const OAuthSuccess = lazy(() => import('./features/auth/OAuthSuccess').then(module => ({ default: module.OAuthSuccess })));
 const ProblemList = lazy(() => import('./features/dsa/ProblemList').then(module => ({ default: module.ProblemList })));
+const CommunityPage = lazy(() => import('./features/community/pages/CommunityPage'));
+const CreatePostPage = lazy(() => import('./features/community/pages/CreatePostPage'));
+const PostDetailPage = lazy(() => import('./features/community/pages/PostDetailPage'));
 
 const ProtectedLayout = ({ children, title = "Console" }) => {
   const { user, loading, refreshUser } = useAuth();
@@ -52,6 +55,13 @@ const ProtectedLayout = ({ children, title = "Console" }) => {
                 <span className="text-[10px] text-brand-grey-400">XP</span>
               </div>
             </div>
+            <div className="group transition-transform hover:-translate-y-1">
+              <p className="text-[9px] uppercase tracking-widest text-brand-grey-400 font-display font-bold mb-1">Reputation</p>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-display font-bold leading-none">{user.karma || 0}</span>
+                <span className="text-[10px] text-brand-grey-400">Karma</span>
+              </div>
+            </div>
           </div>
         </header>
         <div className="max-w-6xl mx-auto min-h-[50vh]">
@@ -78,6 +88,9 @@ function App() {
           <Route path="/dsa" element={<ProtectedLayout title="DSA Lab"><ProblemList /></ProtectedLayout>} />
           <Route path="/profile" element={<ProtectedLayout title="Profile"><ProfilePage /></ProtectedLayout>} />
           <Route path="/lesson/:slug" element={<ProtectedLayout title="Simulator"><QuizEngine /></ProtectedLayout>} />
+          <Route path="/community" element={<ProtectedLayout title="Community"><CommunityPage /></ProtectedLayout>} />
+          <Route path="/community/create" element={<ProtectedLayout title="New Post"><CreatePostPage /></ProtectedLayout>} />
+          <Route path="/community/post/:id" element={<ProtectedLayout title="Discussion"><PostDetailPage /></ProtectedLayout>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Suspense>

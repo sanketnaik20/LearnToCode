@@ -1,40 +1,48 @@
 const rateLimit = require('express-rate-limit');
 
-// General API rate limiter
+// General API rate limiter - Production Grade
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200, // Limit each IP to 200 requests per windowMs
-    message: {
-        message: 'Too many requests from this IP, please try again after 15 minutes'
-    },
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    max: 300, 
+    message: { message: 'Too many requests, please try again later' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req, res) => process.env.NODE_ENV === 'development'
 });
 
-// Stricter rate limiter for authentication routes
+// Community specific rate limiter - Generous for active discussion
+const communityLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 1000, // High limit for browsing posts/comments/voting
+    message: { message: 'Community interaction limit reached, please slow down' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req, res) => process.env.NODE_ENV === 'development'
+});
+
+// Stricter rate limiter for sensitive authentication routes
 const authLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 10, // Limit each IP to 10 login/register requests per hour
-    message: {
-        message: 'Too many authentication attempts, please try again after an hour'
-    },
+    max: 20, 
+    message: { message: 'Too many authentication attempts, please try again after an hour' },
     standardHeaders: true,
     legacyHeaders: false,
+    skip: (req, res) => process.env.NODE_ENV === 'development'
 });
 
-// Rate limiter for question submissions/validations
+// Rate limiter for resource-intensive question submissions
 const submissionLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 50, // Limit each IP to 50 submissions per 15 minutes
-    message: {
-        message: 'Too many submissions, please slow down'
-    },
+    max: 50, 
+    message: { message: 'Too many submissions, please slow down' },
     standardHeaders: true,
     legacyHeaders: false,
+    skip: (req, res) => process.env.NODE_ENV === 'development'
 });
 
 module.exports = {
     apiLimiter,
+    communityLimiter,
     authLimiter,
     submissionLimiter
 };

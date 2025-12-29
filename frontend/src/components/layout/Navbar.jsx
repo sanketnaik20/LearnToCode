@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
-import { LogOut, LayoutDashboard, Terminal, Trophy, User, Sun, Moon, AlertTriangle, Code } from "lucide-react";
+import { LogOut, LayoutDashboard, Terminal, Trophy, User, Sun, Moon, AlertTriangle, Code, Users } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { Button } from "../ui/Button";
 
@@ -17,6 +17,7 @@ export const Navbar = () => {
     { label: "Learn", icon: LayoutDashboard, path: "/" },
     { label: "Playground", icon: Terminal, path: "/playground" },
     { label: "DSA Lab", icon: Code, path: "/dsa" },
+    { label: "Community", icon: Users, path: "/community" },
     { label: "Leaderboard", icon: Trophy, path: "/leaderboard" },
     { label: "Profile", icon: User, path: "/profile" },
   ];

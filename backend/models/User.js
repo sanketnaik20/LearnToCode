@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
     streakCount: { type: Number, default: 0 },
     collegeName: { type: String, default: '' },
     leetcodeUsername: { type: String, default: '' },
+    karma: { type: Number, default: 0 },
     lastActiveAt: { type: Date, default: Date.now },
     // Question history for first-time bonus tracking
     questionHistory: [{
